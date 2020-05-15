@@ -125,11 +125,7 @@ public class HomeActivity extends AppCompatActivity {
                 HomeActivity.this.finish();
             }
         });
-
-
-
     }
-
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -151,29 +147,26 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        super.onPause();
         myService.pauseMedia();
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        myService.playMedia();
+        super.onPause();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         //解除繫結
+        myService.pauseMedia();
+    }
+
+    @Override
+    protected void onDestroy() {
         if (isBind){
             unbindService(mConnection);
         }
-        myService.stopMedia();
         Intent intent=new Intent(this,MyService.class);
         stopService(intent);
-
+        super.onDestroy();
     }
-
 
     private void hideSystemUI() {
         View decorView = getWindow().getDecorView();

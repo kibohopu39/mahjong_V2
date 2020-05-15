@@ -56,15 +56,23 @@ public class MyService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         String act=intent.getStringExtra("ACTION");
         if (act.equals("start")){
-            mediaPlayer.start();
-            mediaPlayer.setLooping(true);
-            mediaPlayer.setVolume(0.4f,0.4f);
+            if (mediaPlayer!=null) {
+                if (!mediaPlayer.isPlaying()) {
+                    mediaPlayer.start();
+                    mediaPlayer.setLooping(true);
+                    mediaPlayer.setVolume(0.4f, 0.4f);
+                }
+            }
         }
         else if (act.equals("pause")){
-            mediaPlayer.pause();
+            if (mediaPlayer!=null) {
+                if (mediaPlayer.isPlaying()) {
+                    mediaPlayer.pause();
+                }
+            }
         }
         else if(act.equals("NOTPLAY")){
-            mediaPlayer2.start();
+            playMedia();
         }
         return super.onStartCommand(intent, flags, startId);
     }
@@ -82,18 +90,28 @@ public class MyService extends Service {
         super.onDestroy();
     }
     public void playMedia(){
-        if (!mediaPlayer2.isPlaying()){
-        mediaPlayer2.start();}
+        if (mediaPlayer2!=null) {
+            if (!mediaPlayer2.isPlaying()) {
+                mediaPlayer2.start();
+                mediaPlayer2.setLooping(true);
+                mediaPlayer2.setVolume(0.4f,0.4f);
+            }
+        }
     }
     public void pauseMedia(){
-        if (mediaPlayer2.isPlaying()){
-        mediaPlayer2.pause();}
+        if (mediaPlayer2!=null) {
+            if (mediaPlayer2.isPlaying()) {
+                mediaPlayer2.pause();
+            }
+        }
     }
 
     public void stopMedia(){
         if (mediaPlayer2!=null){
-        if (mediaPlayer2.isPlaying()){
-        mediaPlayer2.stop();}}
+            if (mediaPlayer2.isPlaying()){
+                mediaPlayer2.stop();
+                mediaPlayer2.release();
+            }}
     }
     public void soundPoolLoad(){
         // 放入萬筒條 11~19(萬) 21~29(筒) 31~39(條) 41~47(東南西北中發白)  20(吃) 30(碰) 40(槓) 48(胡)

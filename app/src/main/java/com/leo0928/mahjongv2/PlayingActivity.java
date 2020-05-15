@@ -265,29 +265,26 @@ public class PlayingActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         pauseBackMusic();
-        myService.playMedia();
         super.onPause();
 
     }
 
     @Override
-    protected void onRestart() {
-        myService.stopMedia();
-        super.onRestart();
+    protected void onStop() {
+        pauseBackMusic();
+        super.onStop();
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
         //解除繫結
         if (isBind){
             unbindService(mConnection);
         }
         Intent intent=new Intent(this,MyService.class);
         stopService(intent);
+        super.onDestroy();
     }
-
-
 
     ValueEventListener singleListener = new ValueEventListener() {
         @Override
